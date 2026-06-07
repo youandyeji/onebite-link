@@ -3,7 +3,8 @@ export type LinkItem = {
   title: string;
   url: string;
   description: string;
-  folder: string;
+  folderId: string;
+  folderName?: string;
 };
 
 export default function LinkCard({ link }: { link: LinkItem }) {
@@ -17,9 +18,11 @@ export default function LinkCard({ link }: { link: LinkItem }) {
           <h3 className="font-bold text-[var(--text)] text-[17px] truncate">{link.title}</h3>
           <p className="text-sm text-[var(--accent)] truncate mt-0.5">{link.url}</p>
           <p className="text-sm text-[var(--text-sub)] mt-1 line-clamp-2 leading-relaxed">{link.description}</p>
-          <span className="inline-block mt-3 px-2.5 py-1 bg-[var(--badge-bg)] text-[var(--accent)] text-xs font-medium rounded-lg">
-            {link.folder}
-          </span>
+          {link.folderName && (
+            <span className="inline-block mt-3 px-2.5 py-1 bg-[var(--badge-bg)] text-[var(--accent)] text-xs font-medium rounded-lg">
+              {link.folderName}
+            </span>
+          )}
         </div>
       </div>
     </div>
