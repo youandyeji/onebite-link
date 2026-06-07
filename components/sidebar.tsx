@@ -5,6 +5,60 @@ import { useState } from "react";
 import { useFolders } from "@/context/folder-context";
 import { type Folder } from "@/lib/mock-data";
 
+function EditFolderModal({
+  folder,
+  onClose,
+}: {
+  folder: Folder;
+  onClose: () => void;
+}) {
+  const { editFolder } = useFolders();
+  const [name, setName] = useState(folder.name);
+
+  function handleSave() {
+    if (!name.trim()) return;
+    editFolder(folder.id, name);
+    onClose();
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[var(--card)] rounded-2xl p-6 w-80 shadow-xl flex flex-col gap-5"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 className="text-lg font-bold text-[var(--text)]">폴더 수정</h2>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSave()}
+          autoFocus
+          className="w-full px-4 py-3 rounded-xl bg-[var(--input-bg)] text-[var(--text)] placeholder-[var(--placeholder)] text-sm outline-none focus:ring-2 focus:ring-[var(--accent)]"
+        />
+        <div className="flex gap-2">
+          <button
+            onClick={onClose}
+            className="flex-1 py-3 rounded-xl text-[var(--text-sub)] text-sm font-bold bg-[var(--input-bg)] hover:bg-[var(--inactive)] transition-all duration-200 active:scale-[0.98]"
+          >
+            취소
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={!name.trim()}
+            className="flex-1 py-3 rounded-xl text-white text-sm font-bold bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            저장
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DeleteConfirmModal({
   folder,
   onConfirm,
@@ -51,6 +105,7 @@ function DeleteConfirmModal({
 export default function Sidebar() {
   const { folders, deleteFolder } = useFolders();
   const [confirmFolder, setConfirmFolder] = useState<Folder | null>(null);
+  const [editingFolder, setEditingFolder] = useState<Folder | null>(null);
 
   function handleConfirmDelete() {
     if (confirmFolder) {
@@ -79,6 +134,29 @@ export default function Sidebar() {
             >
               📁 {folder.name}
             </Link>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setEditingFolder(folder);
+              }}
+              className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-[var(--text-sub)] hover:text-[var(--accent)] hover:bg-[var(--badge-bg)] transition-all duration-200"
+              aria-label={`${folder.name} 폴더 수정`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </button>
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -113,6 +191,12 @@ export default function Sidebar() {
           folder={confirmFolder}
           onConfirm={handleConfirmDelete}
           onClose={() => setConfirmFolder(null)}
+        />
+      )}
+      {editingFolder && (
+        <EditFolderModal
+          folder={editingFolder}
+          onClose={() => setEditingFolder(null)}
         />
       )}
     </>

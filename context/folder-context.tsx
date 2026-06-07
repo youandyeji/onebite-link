@@ -7,12 +7,14 @@ type FolderContextType = {
   folders: Folder[];
   addFolder: (name: string) => void;
   deleteFolder: (id: string) => void;
+  editFolder: (id: string, name: string) => void;
 };
 
 const FolderContext = createContext<FolderContextType>({
   folders: initialFolders,
   addFolder: () => {},
   deleteFolder: () => {},
+  editFolder: () => {},
 });
 
 function generateId(): string {
@@ -33,8 +35,15 @@ export function FolderProvider({ children }: { children: React.ReactNode }) {
     setFolders((prev) => prev.filter((f) => f.id !== id));
   }
 
+  function editFolder(id: string, name: string) {
+    const trimmed = name.trim();
+    if (trimmed) {
+      setFolders((prev) => prev.map((f) => (f.id === id ? { ...f, name: trimmed } : f)));
+    }
+  }
+
   return (
-    <FolderContext.Provider value={{ folders, addFolder, deleteFolder }}>
+    <FolderContext.Provider value={{ folders, addFolder, deleteFolder, editFolder }}>
       {children}
     </FolderContext.Provider>
   );
