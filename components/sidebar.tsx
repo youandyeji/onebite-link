@@ -1,7 +1,11 @@
+'use client'
+
 import Link from "next/link";
-import { folders } from "@/lib/mock-data";
+import { useFolders } from "@/context/folder-context";
 
 export default function Sidebar() {
+  const { folders } = useFolders();
+
   return (
     <aside className="w-56 shrink-0 bg-[var(--card)] shadow-[1px_0_0_rgba(0,0,0,0.06)] p-4 flex flex-col gap-1">
       <Link
