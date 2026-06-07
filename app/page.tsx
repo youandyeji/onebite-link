@@ -1,10 +1,16 @@
+'use client'
+
 import Header from "@/components/header";
 import Sidebar from "@/components/sidebar";
 import LinkGrid from "@/components/link-grid";
-import { mockLinks, folders } from "@/lib/mock-data";
+import { useLinks } from "@/context/link-context";
+import { useFolders } from "@/context/folder-context";
 
 export default function Home() {
-  const linksWithName = mockLinks.map((link) => ({
+  const { links } = useLinks();
+  const { folders } = useFolders();
+
+  const linksWithName = links.map((link) => ({
     ...link,
     folderName: folders.find((f) => f.id === link.folderId)?.name,
   }));
