@@ -13,7 +13,7 @@ export default async function FolderPage(props: PageProps<"/folder/[folderId]">)
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
+        <main className="flex-1 overflow-y-auto p-6 bg-[var(--bg)]">
           <LinkGrid links={links} />
         </main>
       </div>

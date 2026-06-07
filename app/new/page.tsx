@@ -8,7 +8,7 @@ export default function NewPage() {
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto p-6 bg-gray-50 flex items-start justify-center">
+        <main className="flex-1 overflow-y-auto p-6 bg-[var(--bg)] flex items-start justify-center">
           <NewLinkForm />
         </main>
       </div>

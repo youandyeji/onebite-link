@@ -8,16 +8,16 @@ export type LinkItem = {
 
 export default function LinkCard({ link }: { link: LinkItem }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow">
+    <div className="bg-[var(--card)] rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition-shadow duration-200">
       <div className="flex items-start gap-3">
-        <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-base">
+        <div className="w-10 h-10 rounded-xl bg-[var(--badge-bg)] flex items-center justify-center shrink-0 text-lg">
           🔗
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate">{link.title}</h3>
-          <p className="text-xs text-blue-500 truncate mt-0.5">{link.url}</p>
-          <p className="text-sm text-gray-500 mt-1 line-clamp-2">{link.description}</p>
-          <span className="inline-block mt-2 px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">
+          <h3 className="font-bold text-[var(--text)] text-[17px] truncate">{link.title}</h3>
+          <p className="text-sm text-[var(--accent)] truncate mt-0.5">{link.url}</p>
+          <p className="text-sm text-[var(--text-sub)] mt-1 line-clamp-2 leading-relaxed">{link.description}</p>
+          <span className="inline-block mt-3 px-2.5 py-1 bg-[var(--badge-bg)] text-[var(--accent)] text-xs font-medium rounded-lg">
             {link.folder}
           </span>
         </div>

@@ -4,27 +4,29 @@ const folders = ["개발", "디자인", "비즈니스", "기타"];
 
 export default function NewLinkForm() {
   return (
-    <form className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col gap-5 max-w-lg w-full">
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-gray-700" htmlFor="url">
+    <form className="bg-[var(--card)] rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,0,0,0.08)] flex flex-col gap-5 max-w-lg w-full">
+      <h2 className="text-xl font-bold text-[var(--text)]">새 링크 추가</h2>
+
+      <div className="flex flex-col gap-2">
+        <label className="text-[17px] font-bold text-[var(--text)]" htmlFor="url">
           링크 URL
         </label>
         <input
           id="url"
           type="url"
           placeholder="https://example.com"
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="px-4 py-3.5 bg-[var(--input-bg)] rounded-xl text-[17px] text-[var(--text)] placeholder:text-[var(--placeholder)] focus:outline-none focus:bg-[var(--card)] focus:shadow-[0_0_0_2px_var(--accent)] transition-all duration-200"
         />
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-gray-700" htmlFor="folder">
+      <div className="flex flex-col gap-2">
+        <label className="text-[17px] font-bold text-[var(--text)]" htmlFor="folder">
           폴더
         </label>
         <select
           id="folder"
           defaultValue=""
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+          className="px-4 py-3.5 bg-[var(--input-bg)] rounded-xl text-[17px] text-[var(--text)] focus:outline-none focus:bg-[var(--card)] focus:shadow-[0_0_0_2px_var(--accent)] transition-all duration-200"
         >
           <option value="" disabled>
             폴더를 선택하세요
@@ -39,7 +41,7 @@ export default function NewLinkForm() {
 
       <button
         type="submit"
-        className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+        className="px-5 py-3.5 bg-[var(--accent)] text-white text-[17px] font-bold rounded-xl hover:bg-[var(--accent-hover)] active:scale-[0.98] transition-all duration-200 mt-1"
       >
         저장
       </button>
