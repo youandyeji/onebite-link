@@ -7,14 +7,14 @@ import { type LinkItem } from "@/components/link-card";
 type LinkContextType = {
   links: LinkItem[];
   addLink: (link: Omit<LinkItem, "id">) => Promise<void>;
-  deleteLink: (id: number) => void;
+  deleteLink: (id: number) => Promise<void>;
   editLink: (id: number, patch: Pick<LinkItem, "title" | "description" | "folderId">) => Promise<void>;
 };
 
 const LinkContext = createContext<LinkContextType>({
   links: [],
   addLink: async () => {},
-  deleteLink: () => {},
+  deleteLink: async () => {},
   editLink: async () => {},
 });
 
@@ -61,7 +61,9 @@ export function LinkProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  function deleteLink(id: number) {
+  async function deleteLink(id: number) {
+    const supabase = createClient();
+    await supabase.from("links").delete().eq("id", id);
     setLinks((prev) => prev.filter((l) => l.id !== id));
   }
 
