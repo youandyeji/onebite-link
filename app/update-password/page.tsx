@@ -14,16 +14,10 @@ export default function UpdatePasswordPage() {
 
   const isFormFilled = password !== "" && confirmPassword !== "";
 
-  // URL의 code를 세션으로 교환
   useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get("code");
-    if (!code) {
-      setIsReady(true);
-      return;
-    }
     const supabase = createClient();
-    supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
-      if (error) {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
         setToast("유효하지 않거나 만료된 링크입니다. 비밀번호 찾기를 다시 시도해주세요.");
       }
       setIsReady(true);

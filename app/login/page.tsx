@@ -20,6 +20,11 @@ export default function LoginPage() {
     return () => clearTimeout(timer);
   }, [toast]);
 
+  async function handleKakaoLogin() {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({ provider: "kakao" });
+  }
+
   async function handleLogin() {
     setIsLoading(true);
     const supabase = createClient();
@@ -67,6 +72,20 @@ export default function LoginPage() {
             className="w-full py-[14px] mt-1 bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-[17px] font-bold rounded-xl active:scale-[0.98] transition-all duration-200 disabled:bg-[var(--inactive)] disabled:text-[var(--text-sub)] disabled:cursor-not-allowed disabled:active:scale-100"
           >
             {isLoading ? "로그인 중..." : "로그인"}
+          </button>
+          <div className="flex items-center gap-3 my-1">
+            <div className="flex-1 h-px bg-[var(--inactive)]" />
+            <span className="text-[13px] text-[var(--placeholder)]">또는</span>
+            <div className="flex-1 h-px bg-[var(--inactive)]" />
+          </div>
+          <button
+            onClick={handleKakaoLogin}
+            className="w-full py-[14px] bg-[#FEE500] hover:bg-[#F0D800] text-[#3C1E1E] text-[17px] font-bold rounded-xl active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#3C1E1E" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3C6.477 3 2 6.582 2 11.008c0 2.836 1.832 5.328 4.594 6.773l-1.17 4.356a.375.375 0 0 0 .547.416l4.93-3.268C11.26 19.43 11.628 19.46 12 19.46c5.523 0 10-3.582 10-8.008S17.523 3 12 3Z" />
+            </svg>
+            카카오로 로그인
           </button>
           <p className="text-center text-[14px] text-[var(--text-sub)]">
             <Link

@@ -9,18 +9,18 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const code = request.nextUrl.searchParams.get("code");
 
-  // 복구 코드가 다른 경로에 도착하면 /update-password로 전달
-  if (code && !user && pathname !== "/update-password") {
-    const url = new URL("/update-password", request.url);
+  // code가 /auth/callback 이외의 경로에 도착하면 /auth/callback으로 전달
+  // (비밀번호 재설정 코드, OAuth 코드 모두 /auth/callback에서 처리)
+  if (code && !user && !pathname.startsWith("/auth/")) {
+    const url = new URL("/auth/callback", request.url);
     url.searchParams.set("code", code);
     return NextResponse.redirect(url);
   }
 
-  // /update-password는 복구 코드가 있을 때만 비로그인 접근 허용
   const isProtected =
     PROTECTED_PATHS.includes(pathname) ||
     pathname.startsWith("/folder/") ||
-    (pathname === "/update-password" && !code);
+    pathname === "/update-password";
 
   const isAuthPage = AUTH_PATHS.includes(pathname);
 
