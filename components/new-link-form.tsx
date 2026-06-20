@@ -26,7 +26,7 @@ export default function NewLinkForm() {
       const res = await fetch(`/api/og?url=${encodeURIComponent(url.trim())}`);
       const og = await res.json();
 
-      addLink({
+      await addLink({
         title: og.title || url.trim(),
         url: og.url || url.trim(),
         description: og.description || "",
