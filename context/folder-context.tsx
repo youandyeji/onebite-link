@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { type Folder } from "@/lib/mock-data";
 
@@ -20,16 +20,30 @@ const FolderContext = createContext<FolderContextType>({
 
 export function FolderProvider({ children }: { children: React.ReactNode }) {
   const [folders, setFolders] = useState<Folder[]>([]);
+  const currentUserIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
-    supabase
-      .from("folders")
-      .select("*")
-      .order("created_at", { ascending: true })
-      .then(({ data }) => {
-        if (data) setFolders(data);
-      });
+
+    async function fetchFolders(userId: string) {
+      const { data } = await supabase
+        .from("folders")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: true });
+      if (data) setFolders(data);
+    }
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const newUserId = session?.user?.id ?? null;
+      if (newUserId === currentUserIdRef.current) return;
+
+      currentUserIdRef.current = newUserId;
+      setFolders([]);
+      if (newUserId) fetchFolders(newUserId);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   async function addFolder(name: string) {
