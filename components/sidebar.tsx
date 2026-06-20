@@ -194,7 +194,7 @@ export default function Sidebar() {
             </button>
           </div>
         ))}
-        <div className="mt-auto pt-3 border-t border-[var(--inactive)]">
+        <div className="mt-auto pt-3 border-t border-[var(--inactive)] flex flex-col gap-1">
           <button
             onClick={handleLogout}
             className="w-full px-3 py-2.5 rounded-xl text-[var(--text-sub)] text-sm font-bold hover:bg-[var(--badge-bg)] hover:text-[var(--error)] transition-all duration-200 active:scale-[0.98] flex items-center gap-2"
@@ -216,6 +216,12 @@ export default function Sidebar() {
             </svg>
             로그아웃
           </button>
+          <Link
+            href="/privacy"
+            className="w-full px-3 py-2 text-[var(--placeholder)] text-[12px] hover:text-[var(--text-sub)] transition-colors duration-200 text-center"
+          >
+            개인정보 처리방침
+          </Link>
         </div>
       </aside>
       {confirmFolder && (
