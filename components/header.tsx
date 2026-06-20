@@ -7,10 +7,13 @@ import { useFolders } from "@/context/folder-context";
 function NewFolderModal({ onClose }: { onClose: () => void }) {
   const { addFolder } = useFolders();
   const [name, setName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSave() {
-    if (!name.trim()) return;
-    addFolder(name);
+  async function handleSave() {
+    if (!name.trim() || isSubmitting) return;
+    setIsSubmitting(true);
+    await addFolder(name);
+    setIsSubmitting(false);
     onClose();
   }
 
@@ -42,7 +45,7 @@ function NewFolderModal({ onClose }: { onClose: () => void }) {
           </button>
           <button
             onClick={handleSave}
-            disabled={!name.trim()}
+            disabled={!name.trim() || isSubmitting}
             className="flex-1 py-3 rounded-xl text-white text-sm font-bold bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-all duration-200 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
           >
             저장

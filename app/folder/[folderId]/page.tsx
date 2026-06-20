@@ -12,7 +12,7 @@ export default function FolderPage(props: { params: Promise<{ folderId: string }
   const { links } = useLinks();
   const { folders } = useFolders();
 
-  const folder = folders.find((f) => f.id === folderId);
+  const folder = folders.find((f) => f.id === Number(folderId));
   const filteredLinks = links
     .filter((link) => link.folderId === folderId)
     .map((link) => ({ ...link, folderName: folder?.name }));

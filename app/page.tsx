@@ -12,7 +12,7 @@ export default function Home() {
 
   const linksWithName = links.map((link) => ({
     ...link,
-    folderName: folders.find((f) => f.id === link.folderId)?.name,
+    folderName: folders.find((f) => String(f.id) === link.folderId)?.name,
   }));
 
   return (

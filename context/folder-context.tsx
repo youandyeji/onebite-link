@@ -1,41 +1,56 @@
 'use client'
 
-import { createContext, useContext, useState } from "react";
-import { folders as initialFolders, type Folder } from "@/lib/mock-data";
+import { createContext, useContext, useState, useEffect } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { type Folder } from "@/lib/mock-data";
 
 type FolderContextType = {
   folders: Folder[];
-  addFolder: (name: string) => void;
-  deleteFolder: (id: string) => void;
-  editFolder: (id: string, name: string) => void;
+  addFolder: (name: string) => Promise<void>;
+  deleteFolder: (id: number) => void;
+  editFolder: (id: number, name: string) => void;
 };
 
 const FolderContext = createContext<FolderContextType>({
-  folders: initialFolders,
-  addFolder: () => {},
+  folders: [],
+  addFolder: async () => {},
   deleteFolder: () => {},
   editFolder: () => {},
 });
 
-function generateId(): string {
-  return Math.floor(10000000 + Math.random() * 90000000).toString();
-}
-
 export function FolderProvider({ children }: { children: React.ReactNode }) {
-  const [folders, setFolders] = useState<Folder[]>(initialFolders);
+  const [folders, setFolders] = useState<Folder[]>([]);
 
-  function addFolder(name: string) {
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from("folders")
+      .select("*")
+      .order("created_at", { ascending: true })
+      .then(({ data }) => {
+        if (data) setFolders(data);
+      });
+  }, []);
+
+  async function addFolder(name: string) {
     const trimmed = name.trim();
-    if (trimmed && !folders.some((f) => f.name === trimmed)) {
-      setFolders((prev) => [...prev, { id: generateId(), name: trimmed }]);
+    if (!trimmed) return;
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("folders")
+      .insert({ name: trimmed })
+      .select()
+      .single();
+    if (data) {
+      setFolders((prev) => [...prev, data]);
     }
   }
 
-  function deleteFolder(id: string) {
+  function deleteFolder(id: number) {
     setFolders((prev) => prev.filter((f) => f.id !== id));
   }
 
-  function editFolder(id: string, name: string) {
+  function editFolder(id: number, name: string) {
     const trimmed = name.trim();
     if (trimmed) {
       setFolders((prev) => prev.map((f) => (f.id === id ? { ...f, name: trimmed } : f)));

@@ -1,13 +1,6 @@
 import { LinkItem } from "@/components/link-card";
 
-export type Folder = { id: string; name: string };
-
-export const folders: Folder[] = [
-  { id: "10293847", name: "개발" },
-  { id: "28374615", name: "디자인" },
-  { id: "37261948", name: "비즈니스" },
-  { id: "46182736", name: "기타" },
-];
+export type Folder = { id: number; name: string; created_at: string };
 
 export const mockLinks: LinkItem[] = [
   {
