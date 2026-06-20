@@ -8,14 +8,14 @@ type FolderContextType = {
   folders: Folder[];
   addFolder: (name: string) => Promise<void>;
   deleteFolder: (id: number) => void;
-  editFolder: (id: number, name: string) => void;
+  editFolder: (id: number, name: string) => Promise<void>;
 };
 
 const FolderContext = createContext<FolderContextType>({
   folders: [],
   addFolder: async () => {},
   deleteFolder: () => {},
-  editFolder: () => {},
+  editFolder: async () => {},
 });
 
 export function FolderProvider({ children }: { children: React.ReactNode }) {
@@ -50,11 +50,12 @@ export function FolderProvider({ children }: { children: React.ReactNode }) {
     setFolders((prev) => prev.filter((f) => f.id !== id));
   }
 
-  function editFolder(id: number, name: string) {
+  async function editFolder(id: number, name: string) {
     const trimmed = name.trim();
-    if (trimmed) {
-      setFolders((prev) => prev.map((f) => (f.id === id ? { ...f, name: trimmed } : f)));
-    }
+    if (!trimmed) return;
+    const supabase = createClient();
+    await supabase.from("folders").update({ name: trimmed }).eq("id", id);
+    setFolders((prev) => prev.map((f) => (f.id === id ? { ...f, name: trimmed } : f)));
   }
 
   return (

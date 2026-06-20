@@ -15,9 +15,9 @@ function EditFolderModal({
   const { editFolder } = useFolders();
   const [name, setName] = useState(folder.name);
 
-  function handleSave() {
+  async function handleSave() {
     if (!name.trim()) return;
-    editFolder(folder.id, name);
+    await editFolder(folder.id, name);
     onClose();
   }
 
