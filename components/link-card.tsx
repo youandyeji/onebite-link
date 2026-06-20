@@ -94,8 +94,8 @@ function EditModal({
   const [description, setDescription] = useState(link.description);
   const [folderId, setFolderId] = useState(link.folderId);
 
-  function handleSave() {
-    editLink(link.id, { title, description, folderId });
+  async function handleSave() {
+    await editLink(link.id, { title, description, folderId });
     onClose();
   }
 

@@ -8,14 +8,14 @@ type LinkContextType = {
   links: LinkItem[];
   addLink: (link: Omit<LinkItem, "id">) => Promise<void>;
   deleteLink: (id: number) => void;
-  editLink: (id: number, patch: Pick<LinkItem, "title" | "description" | "folderId">) => void;
+  editLink: (id: number, patch: Pick<LinkItem, "title" | "description" | "folderId">) => Promise<void>;
 };
 
 const LinkContext = createContext<LinkContextType>({
   links: [],
   addLink: async () => {},
   deleteLink: () => {},
-  editLink: () => {},
+  editLink: async () => {},
 });
 
 function mapLink(data: Record<string, unknown>): LinkItem {
@@ -65,7 +65,16 @@ export function LinkProvider({ children }: { children: React.ReactNode }) {
     setLinks((prev) => prev.filter((l) => l.id !== id));
   }
 
-  function editLink(id: number, patch: Pick<LinkItem, "title" | "description" | "folderId">) {
+  async function editLink(id: number, patch: Pick<LinkItem, "title" | "description" | "folderId">) {
+    const supabase = createClient();
+    await supabase
+      .from("links")
+      .update({
+        title: patch.title,
+        description: patch.description,
+        folder_id: patch.folderId ? Number(patch.folderId) : null,
+      })
+      .eq("id", id);
     setLinks((prev) => prev.map((l) => (l.id === id ? { ...l, ...patch } : l)));
   }
 
