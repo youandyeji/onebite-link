@@ -107,9 +107,9 @@ export default function Sidebar() {
   const [confirmFolder, setConfirmFolder] = useState<Folder | null>(null);
   const [editingFolder, setEditingFolder] = useState<Folder | null>(null);
 
-  function handleConfirmDelete() {
+  async function handleConfirmDelete() {
     if (confirmFolder) {
-      deleteFolder(confirmFolder.id);
+      await deleteFolder(confirmFolder.id);
       setConfirmFolder(null);
     }
   }

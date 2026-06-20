@@ -7,14 +7,14 @@ import { type Folder } from "@/lib/mock-data";
 type FolderContextType = {
   folders: Folder[];
   addFolder: (name: string) => Promise<void>;
-  deleteFolder: (id: number) => void;
+  deleteFolder: (id: number) => Promise<void>;
   editFolder: (id: number, name: string) => Promise<void>;
 };
 
 const FolderContext = createContext<FolderContextType>({
   folders: [],
   addFolder: async () => {},
-  deleteFolder: () => {},
+  deleteFolder: async () => {},
   editFolder: async () => {},
 });
 
@@ -46,7 +46,9 @@ export function FolderProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  function deleteFolder(id: number) {
+  async function deleteFolder(id: number) {
+    const supabase = createClient();
+    await supabase.from("folders").delete().eq("id", id);
     setFolders((prev) => prev.filter((f) => f.id !== id));
   }
 
