@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useFolders } from "@/context/folder-context";
 import { type Folder } from "@/lib/mock-data";
+import { createClient } from "@/utils/supabase/client";
 
 function EditFolderModal({
   folder,
@@ -106,12 +108,19 @@ export default function Sidebar() {
   const { folders, deleteFolder } = useFolders();
   const [confirmFolder, setConfirmFolder] = useState<Folder | null>(null);
   const [editingFolder, setEditingFolder] = useState<Folder | null>(null);
+  const router = useRouter();
 
   async function handleConfirmDelete() {
     if (confirmFolder) {
       await deleteFolder(confirmFolder.id);
       setConfirmFolder(null);
     }
+  }
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
   }
 
   return (
@@ -185,6 +194,29 @@ export default function Sidebar() {
             </button>
           </div>
         ))}
+        <div className="mt-auto pt-3 border-t border-[var(--inactive)]">
+          <button
+            onClick={handleLogout}
+            className="w-full px-3 py-2.5 rounded-xl text-[var(--text-sub)] text-sm font-bold hover:bg-[var(--badge-bg)] hover:text-[var(--error)] transition-all duration-200 active:scale-[0.98] flex items-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            로그아웃
+          </button>
+        </div>
       </aside>
       {confirmFolder && (
         <DeleteConfirmModal
