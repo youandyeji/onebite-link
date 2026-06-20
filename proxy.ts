@@ -1,8 +1,26 @@
-import { type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
 
+const PROTECTED_PATHS = ["/", "/new"];
+const AUTH_PATHS = ["/login", "/signup"];
+
 export async function proxy(request: NextRequest) {
-  return await updateSession(request);
+  const { response, user } = await updateSession(request);
+  const { pathname } = request.nextUrl;
+
+  const isProtected =
+    PROTECTED_PATHS.includes(pathname) || pathname.startsWith("/folder/");
+  const isAuthPage = AUTH_PATHS.includes(pathname);
+
+  if (isProtected && !user) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (isAuthPage && user) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  return response;
 }
 
 export const config = {

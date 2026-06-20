@@ -27,7 +27,7 @@ export const updateSession = async (request: NextRequest) => {
   );
 
   // getUser() 호출이 세션을 갱신하고 쿠키에 토큰을 기록한다
-  await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  return supabaseResponse;
+  return { response: supabaseResponse, user };
 };
