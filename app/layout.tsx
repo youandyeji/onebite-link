@@ -15,8 +15,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "한입 링크",
-  description: "링크를 폴더별로 정리하세요",
+  title: {
+    template: "%s | 한입 링크",
+    default: "한입 링크",
+  },
+  description: "링크를 폴더별로 깔끔하게 정리하세요",
+  openGraph: {
+    title: "한입 링크",
+    description: "링크를 폴더별로 깔끔하게 정리하세요",
+    images: [{ url: "/thumbnail.png", width: 1200, height: 630 }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "한입 링크",
+    description: "링크를 폴더별로 깔끔하게 정리하세요",
+    images: ["/thumbnail.png"],
+  },
 };
 
 export default function RootLayout({

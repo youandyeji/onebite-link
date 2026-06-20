@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import Header from "@/components/header";
+
+export const metadata: Metadata = { title: "링크 추가" };
 import Sidebar from "@/components/sidebar";
 import NewLinkForm from "@/components/new-link-form";
 
